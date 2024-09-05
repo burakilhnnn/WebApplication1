@@ -14,7 +14,10 @@ namespace Application.Common.Interfaces.Repository
         Task UpdateAsync(Category category, CancellationToken token);
         void Delete(Category category);
 
+        Task<List<Category>> GetAllCategoriesAsync(int? id, string? name, int?parentId);
         Task<List<Category>> GetAllCategoriesAsync(int? id);
+
+
         Task DeleteAsync(Category category, CancellationToken cancellationToken);
     }
 }

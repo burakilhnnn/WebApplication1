@@ -23,6 +23,19 @@ namespace WebApplication1.Controllers
             this.mediator = mediator;
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetCategoryById([FromRoute] int id)
+        {
+            var query = new GetAllCategoriesQueryRequest { Id = id };
+            var response = await mediator.Send(query);
+
+            if (response == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(response);
+        }
 
         [HttpGet]
         [AllowAnonymous]

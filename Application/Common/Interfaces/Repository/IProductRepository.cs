@@ -15,7 +15,7 @@ namespace Application.Common.Interfaces.Repository
         Task UpdateAsync(Product product, CancellationToken token);
         void Delete(Product product); 
 
-        Task DeleteAsync(Product product, CancellationToken cancellationToken); // Bu metodun tanımlı olduğundan emin olun
-        Task<List<Product>> GetAllProductsAsync(int? id);
+        Task DeleteAsync(Product product, CancellationToken cancellationToken); 
+        Task<List<Product>> GetAllProductsAsync(int? id, string? title, string? description, decimal? price, int? categoryId, string? stock, decimal? maxPrice, decimal? minPrice);
     }
 }

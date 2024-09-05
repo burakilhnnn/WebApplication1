@@ -6,7 +6,10 @@ namespace Application.Features.Orders.Queries.GetAllOrders
 {
     public class GetAllUsersQueryRequest
     {
-        public Guid? UserId { get; set; }
+        public Guid? Id { get; set; }
+        public string? FullName { get; set; }
+        public string? Email { get; set; }
+        public List<Guid>? Roles { get; set; }
 
         public GetAllUserQueryHandler ToQuery()
         {

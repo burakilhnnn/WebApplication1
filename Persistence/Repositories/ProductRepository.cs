@@ -30,13 +30,49 @@ internal class ProductRepository : IProductRepository
         await dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<List<Product>> GetAllProductsAsync(int? id)
+    public async Task<List<Product>> GetAllProductsAsync(int? id, string? title, string? description, decimal? price, int? categoryId, string? stock, decimal? maxPrice, decimal? minPrice)
     {
        IQueryable<Product>query = dbContext.Products;
         if(id != null)
         {
             query=query.Where(x => x.Id == id);
         }
+        
+        if(title != null)
+        {
+            query=query.Where(x => x.Title == title);
+        }        
+       
+        if(description != null)
+        {
+            query=query.Where(x => x.Description == description);
+        }
+
+        if (price != null)
+        {
+            query = query.Where(x => x.Price == price);
+        }
+
+        if (minPrice != null)
+        {
+            query = query.Where(c => c.Price <= minPrice.Value);
+        }
+
+        if (maxPrice != null)
+        {
+            query = query.Where(c => c.Price >= maxPrice.Value);
+        }
+
+        if (categoryId != null)
+        {
+            query=query.Where(x => x.CategoryId == categoryId);
+        }        
+       
+        if(stock != null)
+        {
+            query=query.Where(x => x.Stock == stock);
+        }
+
         
         return await query.ToListAsync();
     }

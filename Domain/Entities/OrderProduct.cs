@@ -8,6 +8,7 @@ namespace Domain.Entities
 {
     public class OrderProduct
     {
+        public int Id { get; set; }
         public string Stock { get; set; }
         public string ProductName { get; set; }
     }

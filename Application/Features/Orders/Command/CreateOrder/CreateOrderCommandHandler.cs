@@ -18,11 +18,12 @@ namespace Application.Features.Orders.Command.CreateOrder
 
         public async Task<Unit> Handle(CreateOrderCommandRequest request, CancellationToken cancellationToken)
         {
-            // Order nesnesini oluştururken Product ve OrderProduct nesnelerini ekleyin
             Order order = new Order
             {
-                Products = request.Products, // Product listesini ekleyin
-                OrderProduct = request.OrderProduct // OrderProduct nesnesini ekleyin
+                OrderProduct = request.OrderProduct, 
+                UserId = request.UserId, 
+                OrderDate = request.OrderDate, 
+                PaymentDate = request.PaymentDate 
             };
 
             await _unitOfWork.GetWriteRepository<Order>().AddAsync(order, cancellationToken);

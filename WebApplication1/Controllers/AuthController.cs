@@ -32,7 +32,7 @@ namespace WebApplication1.Controllers
         public async Task<IActionResult> Giris([FromBody] UserLoginModel userLoginModel)
         {
             var user = await _context.Users
-                .FirstOrDefaultAsync(x => x.FullName.ToLower() == userLoginModel.FullName.ToLower());
+                .FirstOrDefaultAsync(x => x.Email.ToLower() == userLoginModel.Email.ToLower());
 
             if (user == null)
                 return NotFound("Kullanıcı bulunamadı");

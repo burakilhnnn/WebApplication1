@@ -36,21 +36,33 @@ public class UserRepository : IUserRepository
         await dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<List<User>> GetAllUsersAsync(Guid? id)
+    public async Task<List<User>> GetAllUsersAsync(Guid? id, string? fullName, string? email, List<Guid>? roles)
     {
         IQueryable<User> query = dbContext.Users;
 
-        if (id.HasValue)
+        if (id != null)
         {
-            query = query.Where(x => x.Id == id.Value);
+            query = query.Where(x => x.Id == id);
+        }
+
+        if (fullName != null)
+        {
+            query = query.Where(x => x.FullName == fullName);
+        }
+
+        if (email != null)
+        {
+            query = query.Where(x => x.Email == email);
+        }
+        
+
+        
+        if (roles != null)
+        {
+            query = query.Where(x => x.Roles == roles);
         }
 
         return await query.ToListAsync();
-    }
-
-    public async Task<User> GetByIdAsync(Guid id, CancellationToken token)
-    {
-        return await dbContext.Users.FindAsync(new object[] { id }, token);
     }
 
     public async Task UpdateAsync(User user, CancellationToken token)
@@ -117,7 +129,7 @@ public class UserRepository : IUserRepository
         var resetPassword = await dbContext.ResetPassword
             .FirstOrDefaultAsync(rp => rp.UserId == user.Id && rp.ResetCode == resetCode);
 
-        if (resetPassword == null /*|| resetPassword.ExpiryDate < DateTime.UtcNow*/)
+        if (resetPassword == null)
         {
             return false;
         }
@@ -144,7 +156,6 @@ public class UserRepository : IUserRepository
         var user = await dbContext.Users.FindAsync(new object[] { userId }, cancellationToken);
         if (user == null)
         {
-            // Kullanıcı bulunamadı, uygun bir exception fırlatabilirsiniz veya işleme devam edebilirsiniz
             throw new KeyNotFoundException("User not found");
         }
 
@@ -157,7 +168,6 @@ public class UserRepository : IUserRepository
         var user = await dbContext.Users.FindAsync(userId);
         if (user == null)
         {
-            // Kullanıcı bulunamadı, uygun bir exception fırlatabilirsiniz veya null dönebilirsiniz
             throw new KeyNotFoundException("User not found");
         }
 
@@ -169,11 +179,9 @@ public class UserRepository : IUserRepository
         var existingUser = await dbContext.Users.FindAsync(user.Id);
         if (existingUser == null)
         {
-            // Kullanıcı bulunamadı, uygun bir exception fırlatabilirsiniz
             throw new KeyNotFoundException("User not found");
         }
 
-        // Mevcut kullanıcıyı güncelle
         dbContext.Entry(existingUser).CurrentValues.SetValues(user);
         await dbContext.SaveChangesAsync();
     }
@@ -213,4 +221,18 @@ public class UserRepository : IUserRepository
             return false;
         }
     }
+
+    public async Task<User> GetByIdAsync(Guid id, string password, CancellationToken token)
+    {
+        var user = await dbContext.Users.FindAsync(new object[] { id }, token);
+
+        if (user != null && user.Password == password)
+        {
+            return user;
+        }
+
+        return null;
+    }
+
+
 }

@@ -16,7 +16,7 @@ namespace Persistence.Repositories
 
         public async Task AddAsync(Order order, CancellationToken token)
         {
-            await _dbContext.Orders.AddAsync(order,token);
+            await _dbContext.Orders.AddAsync(order, token);
             await _dbContext.SaveChangesAsync(token);
         }
 
@@ -32,14 +32,30 @@ namespace Persistence.Repositories
             await _dbContext.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task<List<Order>> GetAllOrdersAsync(int? id)
+        public async Task<List<Order>> GetAllOrdersAsync(int? id, string? userId, DateTime? orderDate, DateTime? paymentDate)
         {
             IQueryable<Order> query = _dbContext.Orders;
 
             if (id != null)
             {
-                query = query.Where(x => x.Id == id);
+                query = query.Where(x => x.Id == id.Value);
             }
+            
+            if (userId != null)
+            {
+                query = query.Where(x => x.UserId == userId);
+            }
+            
+            if (orderDate != null)
+            {
+                query = query.Where(x => x.OrderDate == orderDate.Value);
+            }
+            
+            if (paymentDate != null)
+            {
+                query = query.Where(x => x.PaymentDate == paymentDate.Value);
+            }
+
 
             return await query.ToListAsync();
         }
@@ -47,7 +63,6 @@ namespace Persistence.Repositories
         public async Task<Order> GetByIdAsync(int id, CancellationToken token)
         {
             return await _dbContext.Orders.FindAsync(new object[] { id }, token);
-
         }
 
         public async Task UpdateAsync(Order order, CancellationToken token)
@@ -62,11 +77,10 @@ namespace Persistence.Repositories
             {
                 throw new KeyNotFoundException("Order not found");
             }
+
+
+
+
         }
-
-
-
-        // Diğer metodlar
     }
-
 }

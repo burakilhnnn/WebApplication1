@@ -21,7 +21,8 @@ namespace Application.Features.Products.Queries.GetAllProducts
 
             public async Task<List<GetAllProductsQueryResponse>> Handle(GetAllProductsQueryHandler query, CancellationToken cancellationToken)
             {
-                var products = await _unitOfWork.Products.GetAllProductsAsync(query.Request.ProductId);
+                var products = await _unitOfWork.Products.GetAllProductsAsync(query.Request.Id,query.Request.Title, query.Request.Description,query.Request.Price, query.Request.CategoryId,query.Request.Stock, query.Request.MinPrice,
+    query.Request.MaxPrice);
 
 
                 var response = products.Select(x => new GetAllProductsQueryResponse {
@@ -31,6 +32,7 @@ namespace Application.Features.Products.Queries.GetAllProducts
                     Price = x.Price,
                     CategoryId = x.CategoryId,
                     Stock = x.Stock,
+
                 }).ToList();
 
 

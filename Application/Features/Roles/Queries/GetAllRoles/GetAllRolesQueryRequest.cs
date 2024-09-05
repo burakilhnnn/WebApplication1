@@ -6,7 +6,9 @@ namespace Application.Features.Orders.Queries.GetAllOrders
 {
     public class GetAllRolesQueryRequest
     {
-        public Guid? RoleId { get; set; }
+        public Guid? Id { get; set; }
+        public string? Name { get; set; }
+        public string? Description { get; set; }
 
         public GetAllRoleQueryHandler ToQuery()
         {

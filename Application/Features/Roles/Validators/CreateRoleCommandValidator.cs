@@ -16,9 +16,6 @@ namespace Application.Features.Roles.Command.CreateRole
             RuleFor(r => r.Description)
                 .MaximumLength(500).WithMessage("Rol açıklaması 500 karakteri geçemez.");
 
-            // İsterseniz, ID'nin geçerli bir Guid olduğundan emin olabilirsiniz.
-            RuleFor(r => r.Id)
-                .NotEqual(Guid.Empty).WithMessage("Rol ID'si boş olamaz.");
         }
     }
 }

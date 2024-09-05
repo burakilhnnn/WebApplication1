@@ -18,10 +18,9 @@ namespace Application.Features.Categories.Queries.GetAllCategories
 
             public async Task<List<GetAllCategoriesQueryResponse>> Handle(GetAllCategoryQueryHandler query, CancellationToken cancellationToken)
             {
-                var categories = await _unitOfWork.Categories.GetAllCategoriesAsync(query.Request.Id);
+                var categories = await _unitOfWork.Categories.GetAllCategoriesAsync(query.Request.Id, query.Request.Name, query.Request.ParentId);
 
-
-                var response = categories.Select(x => new GetAllCategoriesQueryResponse { Id = x.Id, Name = x.Name, ParentId = x.ParentId}).ToList();
+                var response = categories.Select(x => new GetAllCategoriesQueryResponse { Id = x.Id, Name = x.Name, ParentId = x.ParentId }).ToList();
 
                 return response;
 

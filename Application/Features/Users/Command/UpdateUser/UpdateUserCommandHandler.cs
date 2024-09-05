@@ -19,19 +19,16 @@ namespace Application.Features.Users.Command.UpdateUser
 
         public async Task<Unit> Handle(UpdateUserCommandRequest request, CancellationToken cancellationToken)
         {
-            // Kullanıcıyı veritabanından bul
-            var user = await unitOfWork.Users.GetByIdAsync(request.Id, cancellationToken);
+            var user = await unitOfWork.Users.GetByIdAsync(request.Id,request.Password, cancellationToken);
 
-     
             user.Id = request.Id;
             user.FullName = request.FullName;
             user.Email = request.Email;
             user.Password = request.Password;
 
-            // Değişiklikleri veritabanına kaydet
             await unitOfWork.CommitAsync();
 
-            return Unit.Value; // MediatR için dönüş türü
+            return Unit.Value; 
         }
     }
 }

@@ -30,7 +30,7 @@ public class RoleRepository : IRoleRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<List<Role>> GetAllRolesAsync(Guid? id)
+    public async Task<List<Role>> GetAllRolesAsync(Guid? id, string? name, string? description)
     {
         IQueryable<Role> query = _dbContext.Roles;
 
@@ -38,7 +38,16 @@ public class RoleRepository : IRoleRepository
         {
             query = query.Where(x => x.Id == id);
         }
-
+        
+        if (name != null)
+        {
+            query = query.Where(x => x.Name == name);
+        }        
+       
+        if (description != null)
+        {
+            query = query.Where(x => x.Description == description);
+        }
 
         return await query.ToListAsync();
     }

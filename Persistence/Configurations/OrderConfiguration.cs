@@ -18,8 +18,6 @@ namespace Persistence.Configurations
 
             builder.ToTable("Orders");
 
-            builder.Property(o => o.ProductId)
-            .IsRequired();
 
         }
     }

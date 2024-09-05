@@ -2,6 +2,7 @@
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Context;
+using System.Linq;
 
 internal class CategoryRepository : ICategoryRepository
 {
@@ -30,8 +31,7 @@ internal class CategoryRepository : ICategoryRepository
         await dbContext.SaveChangesAsync(cancellationToken);
     }
 
- 
-    public async Task<List<Category>> GetAllCategoriesAsync(int? id)
+    public async Task<List<Category>> GetAllCategoriesAsync(int? id, string? name, int? parentId)
     {
         IQueryable<Category> query = dbContext.Categories;
 
@@ -40,8 +40,31 @@ internal class CategoryRepository : ICategoryRepository
             query = query.Where(x => x.Id == id.Value);
         }
 
+        if (parentId != null) 
+        {
+            query=query.Where(x=>x.ParentId == parentId.Value);
+        }
+        if (name != null)
+        {
+            query = query.Where(x => x.Name == name);
+        }
+
+        return await query.ToListAsync();
+
+    }
+
+    public async Task<List<Category>> GetAllCategoriesAsync(int? id)
+    {
+        IQueryable<Category> query = dbContext.Categories;
+
+        if (id != null)
+        {
+            query = query.Where(x => x.Id == id);
+        }
         return await query.ToListAsync();
     }
+
+
 
     public async Task<Category> GetByIdAsync(int id, CancellationToken token)
     {

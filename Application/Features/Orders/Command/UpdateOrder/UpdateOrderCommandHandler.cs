@@ -22,7 +22,7 @@ namespace Application.Features.Orders.Command.UpdateOrder
             var order = await unitOfWork.Orders.GetByIdAsync(request.Id, cancellationToken);
 
             // Ürünü güncelle
-            order.ProductId = request.ProductId;
+            order.Id = request.Id;
 
             // Değişiklikleri veritabanına kaydet
             await unitOfWork.CommitAsync();

@@ -8,17 +8,15 @@ namespace Domain.Entities
     {
         public User()
         {
-            Roles = new List<Guid>(); // Varsayılan bir boş liste oluşturuyoruz
+            Roles = new List<Guid>();
         }
 
-        public User(string fullName,/* string refreshToken, DateTime refreshTokenExpiryTime,*/ string email, string password/* ,List<Guid> roles*/)
+        public User(string fullName, string email, string password)
         {
             FullName = fullName;
-          //  RefreshToken = refreshToken;
-           // RefreshTokenExpiryTime = refreshTokenExpiryTime;
+
             Email = email;
             Password = password;
-         //   Roles = roles ?? new List<Guid>(); // Eğer null ise boş bir liste oluşturuyoruz
         }
 
         public Guid Id { get; set; }

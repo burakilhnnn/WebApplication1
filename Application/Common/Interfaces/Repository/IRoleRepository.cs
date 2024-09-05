@@ -13,8 +13,8 @@ namespace Application.Common.Interfaces.Repository
         Task UpdateAsync(Role role, CancellationToken token);
         void Delete(Role role);
 
-        Task DeleteAsync(Role role, CancellationToken cancellationToken); // Bu metodun tanımlı olduğundan emin olun
-        Task<List<Role>> GetAllRolesAsync(Guid? id);
+        Task DeleteAsync(Role role, CancellationToken cancellationToken);
+        Task<List<Role>> GetAllRolesAsync(Guid? id, string? name, string? description);
         Task<Role> GetByIdAsync(Guid id, CancellationToken token);
     }
 

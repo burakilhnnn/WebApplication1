@@ -20,10 +20,15 @@ namespace Application.Features.Roles.Queries.GetAllRoles
 
             public async Task<List<GetAllRolesQueryResponse>> Handle(GetAllRoleQueryHandler query, CancellationToken cancellationToken)
             {
-                var roles = await _unitOfWork.Roles.GetAllRolesAsync(query.Request.RoleId);
+                var roles = await _unitOfWork.Roles.GetAllRolesAsync(query.Request.Id, query.Request.Name, query.Request.Description);
                
 
-                var response = roles.Select(x => new GetAllRolesQueryResponse { Id = x.Id, Description = x.Description, Name = x.Name }).ToList();
+                var response = roles.Select(x => new GetAllRolesQueryResponse
+                {
+                    Id = x.Id,
+                    Description = x.Description,
+                    Name = x.Name
+                }).ToList();
 
 
                 return response;

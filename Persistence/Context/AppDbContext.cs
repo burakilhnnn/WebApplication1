@@ -24,6 +24,8 @@ namespace Persistence.Context
         public DbSet<Order> Orders { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<ResetPassword> ResetPassword { get; set; }
+        public DbSet<OrderProduct> OrderProducts { get; set; }
+
 
 
         // Model yapılandırmaları

@@ -7,11 +7,12 @@ namespace Application.Features.Orders.Validators
     {
         public CreateOrderCommandValidator()
         {
-            RuleForEach(command => command.ProductId)
-                .GreaterThan(0)
-                .WithMessage("ProductId sıfırdan büyük olmalıdır.");
+            RuleFor(command => command.UserId)
+                          .NotEmpty()
+                          .WithMessage("Kullanıcı ID'si boş olamaz.");
 
 
         }
+
     }
 }
