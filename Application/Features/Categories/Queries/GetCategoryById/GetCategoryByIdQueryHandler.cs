@@ -6,27 +6,26 @@ using System.Threading.Tasks;
 
 namespace Application.Features.Categories.Queries
 {
-
-
-    public class GetAllCategoriesQueryHandler : IRequestHandler<GetAllCategoriesQueryRequest, List<GetAllCategoriesQueryResponse>>
-    {
-        private readonly IUnitOfWork _unitOfWork;
-
-        public GetAllCategoriesQueryHandler(IUnitOfWork unitOfWork)
+        public class GetCategoryByIdQueryHandler : IRequestHandler<GetCategoryByIdQueryRequest, List<GetCategoryByIdQueryResponse>>
         {
-            _unitOfWork = unitOfWork;
-        }
+            private readonly IUnitOfWork _unitOfWork;
 
-        public async Task<List<GetAllCategoriesQueryResponse>> Handle(GetAllCategoriesQueryRequest request, CancellationToken cancellationToken)
-        {
-            var categories = await _unitOfWork.Categories.GetAllCategoriesAsync(request.Id);
-
-            return categories.Select(x => new GetAllCategoriesQueryResponse
+            public GetCategoryByIdQueryHandler(IUnitOfWork unitOfWork)
             {
-                Id = x.Id,
-                Name = x.Name,
-                ParentId = x.ParentId
-            }).ToList();
+                _unitOfWork = unitOfWork;
+            }
+
+            public async Task<List<GetCategoryByIdQueryResponse>> Handle(GetCategoryByIdQueryRequest request, CancellationToken cancellationToken)
+            {
+                // Belirtilen ID'ye sahip kategorileri al
+                var categories = await _unitOfWork.Categories.GetAllCategoriesAsync(request.Id);
+
+                return categories.Select(x => new GetCategoryByIdQueryResponse
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    ParentId = x.ParentId
+                }).ToList();
+            }
         }
     }
-}

@@ -65,7 +65,19 @@ public class UserRepository : IUserRepository
         return await query.ToListAsync();
     }
 
-    public async Task UpdateAsync(User user, CancellationToken token)
+
+    public async Task<List<User>> GetAllUsersAsync(Guid? id)
+    {
+        IQueryable<User> query = dbContext.Users;
+
+        if (id != null)
+        {
+            query = query.Where(x => x.Id == id);
+        }
+        return await query.ToListAsync();
+    }
+
+        public async Task UpdateAsync(User user, CancellationToken token)
     {
         var existingUser = await dbContext.Users.FindAsync(new object[] { user.Id }, token);
         if (existingUser != null)

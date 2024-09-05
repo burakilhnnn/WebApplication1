@@ -18,5 +18,8 @@ namespace Application.Common.Interfaces.Repository
         void Delete(Order order);
         Task DeleteAsync(Order order, CancellationToken cancellationToken);
         Task<List<Order>> GetAllOrdersAsync(int? id, string? userId, DateTime? orderDate, DateTime? paymentDate);
+        Task<List<Order>> GetAllOrdersAsync(int? id);
+
+
     }
 }

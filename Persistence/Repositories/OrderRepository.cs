@@ -60,6 +60,16 @@ namespace Persistence.Repositories
             return await query.ToListAsync();
         }
 
+        public async Task<List<Order>> GetAllOrdersAsync(int? id)
+        {
+            IQueryable<Order> query = _dbContext.Orders;
+
+            if (id != null)
+            {
+                query = query.Where(x => x.Id == id);
+            }
+            return await query.ToListAsync();
+        }
         public async Task<Order> GetByIdAsync(int id, CancellationToken token)
         {
             return await _dbContext.Orders.FindAsync(new object[] { id }, token);

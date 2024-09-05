@@ -1,6 +1,7 @@
 ﻿using Application.Features.Categories.Command.CreateCategory;
 using Application.Features.Categories.Command.DeleteCategory;
 using Application.Features.Categories.Command.UpdateCategory;
+using Application.Features.Categories.Queries;
 using Application.Features.Categories.Queries.GetAllCategories;
 
 using MediatR;
@@ -24,9 +25,9 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetCategoryById([FromRoute] int id)
+        public async Task<IActionResult> GetCategoriesById([FromRoute] int id)
         {
-            var query = new GetAllCategoriesQueryRequest { Id = id };
+            var query = new GetCategoryByIdQueryRequest { Id = id };
             var response = await mediator.Send(query);
 
             if (response == null)

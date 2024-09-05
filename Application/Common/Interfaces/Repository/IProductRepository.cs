@@ -17,5 +17,6 @@ namespace Application.Common.Interfaces.Repository
 
         Task DeleteAsync(Product product, CancellationToken cancellationToken); 
         Task<List<Product>> GetAllProductsAsync(int? id, string? title, string? description, decimal? price, int? categoryId, string? stock, decimal? maxPrice, decimal? minPrice);
+        Task<List<Product>> GetAllProductsAsync(int? id);
     }
 }

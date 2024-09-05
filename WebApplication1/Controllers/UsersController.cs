@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Authorization;
 using Application.Features.NewPassword.GenerateReset;
 using Application.Features.NewPassword.ConfirmReset;
 using Application.Features.NewPassword.ConfirmReset;
+using Application.Features.Roles.Queries.GetRoleById;
+using Application.Features.Users.Queries.GetUserById;
 
 
 namespace WebApplication1.Controllers
@@ -23,6 +25,21 @@ namespace WebApplication1.Controllers
         public UsersController(IMediator mediator)
         {
             this.mediator = mediator;
+        }
+
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUsersById([FromRoute] Guid id)
+        {
+            var query = new GetUserByIdQueryRequest { Id = id };
+            var response = await mediator.Send(query);
+
+            if (response == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(response);
         }
 
 

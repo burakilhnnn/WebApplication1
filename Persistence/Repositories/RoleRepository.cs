@@ -53,8 +53,19 @@ public class RoleRepository : IRoleRepository
     }
 
 
+    public async Task<List<Role>> GetAllRolesAsync(Guid? id)
+    {
+        IQueryable<Role> query = _dbContext.Roles;
 
-    public async Task<Role> GetByIdAsync(Guid id, CancellationToken token)
+        if (id != null)
+        {
+            query = query.Where(x => x.Id == id);
+        }
+        return await query.ToListAsync();
+    }
+
+
+        public async Task<Role> GetByIdAsync(Guid id, CancellationToken token)
     {
         return await _dbContext.Roles.FindAsync(new object[] { id }, token);
     }

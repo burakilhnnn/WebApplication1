@@ -1,8 +1,10 @@
-﻿using Application.Features.Orders.Command.CreateOrder;
+﻿using Application.Features.Categories.Queries;
+using Application.Features.Categories.Queries.GetAllCategories;
+using Application.Features.Orders.Command.CreateOrder;
 using Application.Features.Orders.Command.DeleteOrder;
 using Application.Features.Orders.Command.UpdateOrder;
 using Application.Features.Orders.Queries.GetAllOrders;
-using Application.Features.Products.Queries.GetAllProducts;
+using Application.Features.Orders.Queries.GetOrderById;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,6 +24,20 @@ namespace WebApplication1.Controllers
         public OrdersController(IMediator mediator)
         {
             this.mediator = mediator;
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetOrderById([FromRoute] int id)
+        {
+            var query = new GetOrderByIdQueryRequest { Id = id };
+            var response = await mediator.Send(query);
+
+            if (response == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(response);
         }
 
 

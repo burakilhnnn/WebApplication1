@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 using Application.Features.Roles.Command.DeleteRole;
 using Application.Features.Orders.Queries.GetAllOrders;
 using Microsoft.AspNetCore.Authorization;
+using Application.Features.Categories.Queries;
+using Application.Features.Roles.Queries.GetRoleById;
 
 namespace WebApplication1.Controllers
 {
@@ -25,6 +27,19 @@ namespace WebApplication1.Controllers
             this.mediator = mediator;
         }
 
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetRolesById([FromRoute] Guid id)
+        {
+            var query = new GetRoleByIdQueryRequest { Id = id };
+            var response = await mediator.Send(query);
+
+            if (response == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(response);
+        }
 
         [HttpGet]
         public async Task<IActionResult> GetAllRoles([FromQuery] GetAllRolesQueryRequest req)

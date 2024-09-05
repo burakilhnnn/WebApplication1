@@ -12,6 +12,7 @@ namespace Application.Common.Interfaces.Repository
         Task UpdateAsync(User user, CancellationToken token);
         Task DeleteAsync(Guid userId, CancellationToken cancellationToken);
         Task<List<User>> GetAllUsersAsync(Guid? id, string? fullName, string? email, List<Guid>? roles);
+        Task<List<User>> GetAllUsersAsync(Guid? id);
         Task<User> GetByIdAsync(Guid id,string password, CancellationToken token);
         Task<User?> GetUserByFullnameAsync(string fullName); 
         Task<User> GetUserByEmailAsync(string email);

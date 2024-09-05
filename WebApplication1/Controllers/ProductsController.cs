@@ -1,7 +1,9 @@
-﻿using Application.Features.Products.Command.CreateProduct;
+﻿using Application.Features.Categories.Queries;
+using Application.Features.Products.Command.CreateProduct;
 using Application.Features.Products.Command.DeleteProduct.Application.Features.Products.Command.DeleteProduct;
 using Application.Features.Products.Command.UpdateProduct;
 using Application.Features.Products.Queries.GetAllProducts;
+using Application.Features.Products.Queries.GetProductById;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -21,8 +23,21 @@ namespace WebApplication1.Controllers
         {
             this.mediator = mediator;
         }
-        
-        
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetProductsById([FromRoute] int id)
+        {
+            var query = new GetProductByIdQueryRequest { Id = id };
+            var response = await mediator.Send(query);
+
+            if (response == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(response);
+        }
+
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> GetAllProducts([FromQuery] GetAllProductsQueryRequest req)

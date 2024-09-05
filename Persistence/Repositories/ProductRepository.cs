@@ -77,6 +77,17 @@ internal class ProductRepository : IProductRepository
         return await query.ToListAsync();
     }
 
+    public async Task<List<Product>> GetAllProductsAsync(int? id)
+    {
+        IQueryable<Product> query = dbContext.Products;
+        if (id != null)
+        {
+            query = query.Where(x => x.Id == id);
+        }
+        return await query.ToListAsync();
+    }
+
+
     public async Task<Product> GetByIdAsync(int id, CancellationToken token)
     {
         return await dbContext.Products.FindAsync(new object[] { id }, token);
