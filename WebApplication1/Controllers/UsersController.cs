@@ -9,6 +9,11 @@ using Application.Features.NewPassword.ConfirmReset;
 using Application.Features.NewPassword.ConfirmReset;
 using Application.Features.Roles.Queries.GetRoleById;
 using Application.Features.Users.Queries.GetUserById;
+using static Application.Features.Users.Queries.GetAllUsers.GetAllUserHandler;
+using static Application.Features.Users.Queries.GetUserById.GetUserByIdHandler;
+using static Application.Features.Users.Command.CreateUser.CreateUserHandler;
+using static Application.Features.Users.Command.UpdateUser.UpdateUserHandler;
+using static Application.Features.Users.Command.DeleteUser.DeleteUserHandler;
 
 
 namespace WebApplication1.Controllers
@@ -16,7 +21,6 @@ namespace WebApplication1.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
- //   [Authorize(Roles = "Admin")]
 
     public class UsersController : ControllerBase
     {
@@ -31,7 +35,7 @@ namespace WebApplication1.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUsersById([FromRoute] Guid id)
         {
-            var query = new GetUserByIdQueryRequest { Id = id };
+            var query = new GetUserByIdRequest { Id = id };
             var response = await mediator.Send(query);
 
             if (response == null)
@@ -42,9 +46,9 @@ namespace WebApplication1.Controllers
             return Ok(response);
         }
 
-
+        [Authorize(Roles = "admin")]
         [HttpGet]
-        public async Task<IActionResult> GetAllUsers([FromQuery] GetAllUsersQueryRequest req)
+        public async Task<IActionResult> GetAllUsers([FromQuery] GetAllUserRequest req)
         {
             var response = await mediator.Send(req.ToQuery());
             return Ok(response);
@@ -52,8 +56,7 @@ namespace WebApplication1.Controllers
 
 
         [HttpPost]
-        [AllowAnonymous]
-        public async Task<IActionResult> CreateUsers(CreateUserCommandRequest request)
+        public async Task<IActionResult> CreateUsers(CreateUserRequest request)
         {
             await mediator.Send(request);
             return Ok();
@@ -61,15 +64,15 @@ namespace WebApplication1.Controllers
 
 
         [HttpPut]
-        public async Task<IActionResult> UpdateUsers(UpdateUserCommandRequest request)
+        public async Task<IActionResult> UpdateUsers(UpdateUserRequest request)
         {
             await mediator.Send(request);
             return Ok();
         }
 
-
+        [Authorize(Roles = "admin")]
         [HttpDelete]
-        public async Task<IActionResult> DeleteUsers(DeleteUserCommandRequest request)
+        public async Task<IActionResult> DeleteUsers(DeleteUserRequest request)
         {
             await mediator.Send(request);
             return Ok();

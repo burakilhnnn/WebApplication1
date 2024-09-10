@@ -4,6 +4,8 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Mvc;
+using static Application.Features.NewPassword.ConfirmReset.ConfirmResetCodeHandler;
+using static Application.Features.NewPassword.GenerateReset.GenerateResetCodeHandler;
 
 namespace WebApplication1.Controllers
 {
@@ -19,10 +21,9 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost("SendCode")]
-        [AllowAnonymous]
         public async Task<IActionResult> RequestPasswordReset([FromBody] PasswordResetRequest request)
         {
-            var result = await _mediator.Send(new GenerateResetCodeCommand(request.Email));
+            var result = await _mediator.Send(new GenerateResetCode(request.Email));
             if (result)
             {
                 return Ok("Reset code has been sent to your email address.");
@@ -31,10 +32,9 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost("NewPassword")]
-        [AllowAnonymous]
         public async Task<IActionResult> ConfirmPasswordReset([FromBody] PasswordResetConfirmationRequest request)
         {
-            var result = await _mediator.Send(new ConfirmResetCodeCommand
+            var result = await _mediator.Send(new ConfirmResetCodeResponse
             {
                 Email = request.Email,
                 ResetCode = request.ResetCode,

@@ -4,7 +4,6 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Models;
 using Domain.Entities;
@@ -15,7 +14,6 @@ namespace WebApplication1.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-   // [Authorize]
     public class AuthController : ControllerBase
     {
         private readonly JwtSettings _jwtSettings;
@@ -55,15 +53,21 @@ namespace WebApplication1.Controllers
 
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
-            var roles = user.Roles.Where(x => x == new Guid()).FirstOrDefault();
+            var dbRoles = _context.Roles.ToList();
+            bool isAdmin = false;
+            foreach (var item in user.Roles)
+            {
+                var role = dbRoles.FirstOrDefault(x => x.Id == item && x.Name == "admin");
+                isAdmin = role != null;
+            }
+
 
             var claims = new[]
             {
                 new Claim(ClaimTypes.NameIdentifier, user.FullName),
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Name, user.FullName),
-               // new Role
-                new Claim(ClaimTypes.Role, roles == null ?  "user" : "Admin")
+                new Claim(ClaimTypes.Role, isAdmin ? "admin" : "user")
             };
 
 

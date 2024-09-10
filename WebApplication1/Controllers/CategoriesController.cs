@@ -1,19 +1,19 @@
-﻿using Application.Features.Categories.Command.CreateCategory;
-using Application.Features.Categories.Command.DeleteCategory;
-using Application.Features.Categories.Command.UpdateCategory;
-using Application.Features.Categories.Queries;
-using Application.Features.Categories.Queries.GetAllCategories;
-
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static Application.Features.Categories.Command.CreateCategory.CreateCategoryHandler;
+using static Application.Features.Categories.Command.DeleteCategory.DeleteCategoryHandler;
+using static Application.Features.Categories.Queries.GetAllCategories.GetAllCategoryHandler;
+using static Application.Features.Categories.Queries.GetCategoryByIdHandler;
+using static Application.Features.Categorys.Command.UpdateCategory.UpdateCategoryHandler;
 
 namespace WebApplication1.Controllers
 {
 
     [Route("api/[controller]")]
-    [ApiController]
-  //  [Authorize(Roles = "Admin")]
+    [ApiController] 
+
+
 
     public class CategoriesController : ControllerBase
     {
@@ -24,10 +24,11 @@ namespace WebApplication1.Controllers
             this.mediator = mediator;
         }
 
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCategoriesById([FromRoute] int id)
         {
-            var query = new GetCategoryByIdQueryRequest { Id = id };
+            var query = new GetCategoryByIdRequest { Id = id };
             var response = await mediator.Send(query);
 
             if (response == null)
@@ -39,8 +40,7 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetAllCategorys([FromQuery] GetAllCategoriesQueryRequest req)
+        public async Task<IActionResult> GetAllCategorys([FromQuery] GetAllCategoryRequest req)
         {
             var response = await mediator.Send(req.ToQuery());
             return Ok(response);
@@ -48,7 +48,8 @@ namespace WebApplication1.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> CreateCategorys(CreateCategoryCommandRequest request)
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> CreateCategorys(CreateCategoryRequest request)
         {
             await mediator.Send(request);
             return Ok();
@@ -56,7 +57,8 @@ namespace WebApplication1.Controllers
 
 
         [HttpPut]
-        public async Task<IActionResult> UpdateCategorys(UpdateCategoryCommandRequest request)
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> UpdateCategorys(UpdateCategoryRequest request)
         {
             await mediator.Send(request);
             return Ok();
@@ -64,7 +66,8 @@ namespace WebApplication1.Controllers
 
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteCategorys(DeleteCategoryCommandRequest request)
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> DeleteCategorys(DeleteCategoryRequest request)
         {
             await mediator.Send(request);
             return Ok();

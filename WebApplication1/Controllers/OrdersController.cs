@@ -1,21 +1,18 @@
-﻿using Application.Features.Categories.Queries;
-using Application.Features.Categories.Queries.GetAllCategories;
-using Application.Features.Orders.Command.CreateOrder;
-using Application.Features.Orders.Command.DeleteOrder;
-using Application.Features.Orders.Command.UpdateOrder;
-using Application.Features.Orders.Queries.GetAllOrders;
-using Application.Features.Orders.Queries.GetOrderById;
+﻿
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static Application.Features.Orders.Command.CreateOrder.CreateOrderHandler;
+using static Application.Features.Orders.Command.DeleteOrder.DeleteOrderHandler;
+using static Application.Features.Orders.Command.UpdateOrder.UpdateOrderHandler;
+using static Application.Features.Orders.Queries.GetAllOrders.GetAllOrderHandler.Handler;
+using static Application.Features.Orders.Queries.GetOrderById.GetOrderByIdHandler;
 
 namespace WebApplication1.Controllers
 {
 
     [Route("api/[controller]")]
     [ApiController]
- //   [Authorize(Roles = "Admin")]
-
 
     public class OrdersController : ControllerBase
     {
@@ -26,10 +23,11 @@ namespace WebApplication1.Controllers
             this.mediator = mediator;
         }
 
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetOrderById([FromRoute] int id)
         {
-            var query = new GetOrderByIdQueryRequest { Id = id };
+            var query = new GetOrderByIdRequest { Id = id };
             var response = await mediator.Send(query);
 
             if (response == null)
@@ -40,28 +38,23 @@ namespace WebApplication1.Controllers
             return Ok(response);
         }
 
-
+        [Authorize(Roles = "admin")]
         [HttpGet]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetAllOrders([FromQuery] GetAllOrdersQueryRequest req)
+        public async Task<IActionResult> GetAllOrders([FromQuery] GetAllOrderRequest req)
         {
             var response = await mediator.Send(req.ToQuery());
             return Ok(response);
         }
 
-
         [HttpPost]
-        [AllowAnonymous]
-        public async Task<IActionResult> CreateOrders(CreateOrderCommandRequest request)
+        public async Task<IActionResult> CreateOrders(CreateOrderRequest request)
         {
             await mediator.Send(request);
             return Ok();
         }
 
-
         [HttpPut]
-        [AllowAnonymous]
-        public async Task<IActionResult> UpdateOrders(UpdateOrderCommandRequest request)
+        public async Task<IActionResult> UpdateOrders(UpdateOrderRequest request)
         {
             await mediator.Send(request);
             return Ok();
@@ -69,8 +62,7 @@ namespace WebApplication1.Controllers
 
 
         [HttpDelete]
-        [AllowAnonymous]
-        public async Task<IActionResult> DeleteOrders(DeleteOrderCommandRequest request)
+        public async Task<IActionResult> DeleteOrders(DeleteOrderRequest request)
         {
             await mediator.Send(request);
             return Ok();

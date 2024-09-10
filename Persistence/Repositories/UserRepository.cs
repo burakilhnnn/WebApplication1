@@ -76,6 +76,7 @@ public class UserRepository : IUserRepository
         }
         return await query.ToListAsync();
     }
+    
 
         public async Task UpdateAsync(User user, CancellationToken token)
     {

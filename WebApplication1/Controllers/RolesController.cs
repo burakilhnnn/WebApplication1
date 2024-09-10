@@ -10,13 +10,17 @@ using Application.Features.Orders.Queries.GetAllOrders;
 using Microsoft.AspNetCore.Authorization;
 using Application.Features.Categories.Queries;
 using Application.Features.Roles.Queries.GetRoleById;
+using static Application.Features.Roles.Queries.GetRoleById.GetRoleByIdHandler;
+using static Application.Features.Roles.Queries.GetAllRoles.GetAllRoleHandler;
+using static Application.Features.Roles.Command.CreateRole.CreateRoleHandler;
+using static Application.Features.Roles.Command.UpdateRole.UpdateRoleHandler;
+using static Application.Features.Roles.Command.DeleteRole.DeleteRoleHandler;
 
 namespace WebApplication1.Controllers
 {
 
     [Route("api/[controller]")]
     [ApiController]
- //   [Authorize(Roles = "Admin")]
 
     public class RolesController : ControllerBase
     {
@@ -27,10 +31,11 @@ namespace WebApplication1.Controllers
             this.mediator = mediator;
         }
 
+        [Authorize(Roles = "admin")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetRolesById([FromRoute] Guid id)
         {
-            var query = new GetRoleByIdQueryRequest { Id = id };
+            var query = new GetRoleByIdRequest { Id = id };
             var response = await mediator.Send(query);
 
             if (response == null)
@@ -41,32 +46,33 @@ namespace WebApplication1.Controllers
             return Ok(response);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpGet]
-        public async Task<IActionResult> GetAllRoles([FromQuery] GetAllRolesQueryRequest req)
+        public async Task<IActionResult> GetAllRoles([FromQuery] GetAllRoleRequest req)
         {
             var response = await mediator.Send(req.ToQuery());
             return Ok(response);
         }
 
-
+        [Authorize(Roles = "admin")]
         [HttpPost]
-        public async Task<IActionResult> CreateRoles(CreateRoleCommandRequest request)
+        public async Task<IActionResult> CreateRoles(CreateRoleRequest request)
         {
             await mediator.Send(request);
             return Ok();
         }
 
-
+        [Authorize(Roles = "admin")]
         [HttpPut]
-        public async Task<IActionResult> UpdateRoles(UpdateRoleCommandRequest request)
+        public async Task<IActionResult> UpdateRoles(UpdateRoleRequest request)
         {
             await mediator.Send(request);
             return Ok();
         }
 
-
+        [Authorize(Roles = "admin")]
         [HttpDelete]
-        public async Task<IActionResult> DeleteRoles(DeleteRoleCommandRequest request)
+        public async Task<IActionResult> DeleteRoles(DeleteRoleRequest request)
         {
             await mediator.Send(request);
             return Ok();

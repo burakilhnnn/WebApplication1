@@ -1,19 +1,16 @@
-﻿using Application.Features.Categories.Queries;
-using Application.Features.Products.Command.CreateProduct;
-using Application.Features.Products.Command.DeleteProduct.Application.Features.Products.Command.DeleteProduct;
-using Application.Features.Products.Command.UpdateProduct;
-using Application.Features.Products.Queries.GetAllProducts;
-using Application.Features.Products.Queries.GetProductById;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using static Application.Features.Products.Command.CreateProduct.CreateProductHandler;
+using static Application.Features.Products.Command.DeleteProduct.DeleteProductHandler;
+using static Application.Features.Products.Command.UpdateProduct.UpdateProductHandler;
+using static Application.Features.Products.Queries.GetAllProducts.GetAllProductHandler.Handler;
+using static Application.Features.Products.Queries.GetProductById.GetProductByIdHandler;
 
 namespace WebApplication1.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-//    [Authorize(Roles = "Admin")]
 
     public class ProductsController : ControllerBase
     {
@@ -27,7 +24,7 @@ namespace WebApplication1.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetProductsById([FromRoute] int id)
         {
-            var query = new GetProductByIdQueryRequest { Id = id };
+            var query = new GetProductByIdRequest { Id = id };
             var response = await mediator.Send(query);
 
             if (response == null)
@@ -38,33 +35,33 @@ namespace WebApplication1.Controllers
             return Ok(response);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpGet]
-        [AllowAnonymous]
-        public async Task<IActionResult> GetAllProducts([FromQuery] GetAllProductsQueryRequest req)
+        public async Task<IActionResult> GetAllProducts([FromQuery] GetAllProductRequest req)
         {
             var response = await mediator.Send(req.ToQuery());
             return Ok(response);
         }
 
-
+        [Authorize(Roles = "admin")]
         [HttpPost]
-        public async Task<IActionResult> CreateProducts(CreateProductCommandRequest request)
+        public async Task<IActionResult> CreateProducts(CreateProductRequest request)
         {
              await mediator.Send(request);
             return Ok();
         }
 
-
+        [Authorize(Roles = "admin")]
         [HttpPut]
-        public async Task<IActionResult> UpdateProducts(UpdateProductCommandRequest request)
+        public async Task<IActionResult> UpdateProducts(UpdateProductRequest request)
         {
             await mediator.Send(request);
             return Ok();
         }
 
-
+        [Authorize(Roles = "admin")]
         [HttpDelete]
-        public async Task<IActionResult> DeleteProducts(DeleteProductCommandRequest request)
+        public async Task<IActionResult> DeleteProducts(DeleteProductRequest request)
         {
             await mediator.Send(request);
             return Ok();

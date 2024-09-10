@@ -1,5 +1,5 @@
-﻿using Application.Interfaces.Repositories;
-using Application.Interfaces.UnitOfWorks;
+﻿using Application.Common.Interfaces.Repository;
+using Application.Common.Interfaces.UnitOfWorks;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

@@ -1,6 +1,5 @@
 ﻿using Application.Common.Interfaces.Repository;
-using Application.Interfaces.Repositories;
-using Application.Interfaces.UnitOfWorks;
+using Application.Common.Interfaces.UnitOfWorks;
 using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Context;
